@@ -15,29 +15,26 @@ fastify.register(AutoLoad, {
 fastify.register(cors, {
   origin: true
 })
-;async (req, res, next) => {
-  if (req.headers['x-access-token']) {
-    try {
-      const accessToken = req.headers['x-access-token']
-      const { userId, exp } = await jwt.verify(
-        accessToken,
-        process.env.JWT_SECRET
-      )
-      // If token has expired
-      if (exp < Date.now().valueOf() / 1000) {
-        return res.status(401).json({
-          error: 'JWT token has expired, please login to obtain a new one'
-        })
+fastify.register(function (req, res, next) {
+  if (
+    req.headers &&
+    req.headers.authorization &&
+    req.headers.authorization.split(' ')[0] === 'JWT'
+  ) {
+    jsonwebtoken.verify(
+      req.headers.authorization.split(' ')[1],
+      'RESTFULAPIs',
+      function (err, decode) {
+        if (err) req.user = undefined
+        req.user = decode
+        next()
       }
-      res.locals.loggedInUser = await User.findById(userId)
-      next()
-    } catch (error) {
-      next(error)
-    }
+    )
   } else {
+    req.user = undefined
     next()
   }
-}
+})
 // Connect to DB
 mongoose
   .connect(process.env.MONGO_URI, { useUnifiedTopology: true })
