@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const UserToken = mongoose.model(
-  'User',
+  'UserToken',
   new mongoose.Schema({
     token: String,
     user: {
@@ -11,4 +11,4 @@ const UserToken = mongoose.model(
   })
 )
 
-module.exports = User
+module.exports = UserToken
