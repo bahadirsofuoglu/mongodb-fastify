@@ -7,7 +7,9 @@ const formBody = require('fastify-formbody')
 const cors = require('fastify-cors')
 const path = require('path')
 const mongoose = require('mongoose')
-const jwt = require('jsonwebtoken')
+
+const db = require('./models')
+const Role = db.role
 fastify.register(formBody)
 fastify.register(AutoLoad, {
   dir: path.join(__dirname, 'routes')
@@ -36,13 +38,20 @@ fastify.register(function (req, res, next) {
     next()
   }
 })
+
 mongoose
   .connect(process.env.MONGO_URI, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
   })
-  .then(() => console.log('MongoDB connected...'))
-  .catch(err => console.log(err))
+  .then(() => {
+    console.log('Successfully connect to MongoDB.')
+    initial()
+  })
+  .catch(err => {
+    console.error('Connection error', err)
+    process.exit()
+  })
 const start = async () => {
   try {
     await fastify.listen(3000)
@@ -52,3 +61,38 @@ const start = async () => {
   }
 }
 start()
+function initial () {
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: 'user'
+      }).save(err => {
+        if (err) {
+          console.log('error', err)
+        }
+
+        console.log("added 'user' to roles collection")
+      })
+
+      new Role({
+        name: 'moderator'
+      }).save(err => {
+        if (err) {
+          console.log('error', err)
+        }
+
+        console.log("added 'moderator' to roles collection")
+      })
+
+      new Role({
+        name: 'admin'
+      }).save(err => {
+        if (err) {
+          console.log('error', err)
+        }
+
+        console.log("added 'admin' to roles collection")
+      })
+    }
+  })
+}
