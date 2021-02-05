@@ -4,12 +4,12 @@ const fastify = require('fastify')({
 require('dotenv').config()
 const AutoLoad = require('fastify-autoload')
 const formBody = require('fastify-formbody')
+const config = require('config')
 const cors = require('fastify-cors')
+const jwt = require('fastify-jwt')
 const path = require('path')
 const mongoose = require('mongoose')
-const jsonwebtoken = require('jsonwebtoken')
-const db = require('./models')
-const Role = db.role
+
 fastify.register(formBody)
 fastify.register(AutoLoad, {
   dir: path.join(__dirname, 'routes')
@@ -17,25 +17,38 @@ fastify.register(AutoLoad, {
 fastify.register(cors, {
   origin: true
 })
+fastify.register(jwt, {
+  secret: config.get('secrets.jwt')
+})
+const authenticate = async request => {
+  const auth = await request.jwtVerify()
+  request.auth = auth
+}
 
-fastify.register(function (req, res, next) {
-  if (
-    req.headers &&
-    req.headers.authorization &&
-    req.headers.authorization.split(' ')[0] === 'JWT'
-  ) {
-    jsonwebtoken.verify(
-      req.headers.authorization.split(' ')[1],
-      'RESTFULAPIs',
-      function (err, decode) {
-        if (err) req.user = undefined
-        req.user = decode
-        next()
-      }
-    )
-  } else {
-    req.user = undefined
-    next()
+fastify.decorate('authenticate', async function (request) {
+  await authenticate(request)
+})
+
+fastify.decorate('admin', async function (request) {
+  await authenticate(request)
+  if (request.auth.role !== 'admin') {
+    throw new ApiError(NO_AUTHORIZATION)
+  }
+})
+
+fastify.decorate('supervisor', async function (request) {
+  await authenticate(request)
+  const role = request.auth.role
+  if (role !== 'supervisor' && role !== 'admin') {
+    throw new ApiError(NO_AUTHORIZATION)
+  }
+})
+
+fastify.decorate('agent', async function (request) {
+  await authenticate(request)
+  const role = request.auth.role
+  if (role !== 'agent' && role !== 'supervisor' && role !== 'admin') {
+    throw new ApiError(NO_AUTHORIZATION)
   }
 })
 
@@ -46,7 +59,6 @@ mongoose
   })
   .then(() => {
     console.log('Successfully connect to MongoDB.')
-    initial()
   })
   .catch(err => {
     console.error('Connection error', err)
@@ -61,38 +73,3 @@ const start = async () => {
   }
 }
 start()
-function initial () {
-  Role.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-      new Role({
-        name: 'user'
-      }).save(err => {
-        if (err) {
-          console.log('error', err)
-        }
-
-        console.log("added 'user' to roles collection")
-      })
-
-      new Role({
-        name: 'moderator'
-      }).save(err => {
-        if (err) {
-          console.log('error', err)
-        }
-
-        console.log("added 'moderator' to roles collection")
-      })
-
-      new Role({
-        name: 'admin'
-      }).save(err => {
-        if (err) {
-          console.log('error', err)
-        }
-
-        console.log("added 'admin' to roles collection")
-      })
-    }
-  })
-}

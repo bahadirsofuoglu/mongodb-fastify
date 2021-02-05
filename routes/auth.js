@@ -1,23 +1,9 @@
-const { verifySignUp } = require('../middlewares')
-const controller = require('../controllers/auth')
-const checkdublicate = verifySignUp.checkDuplicateUsernameOrEmail
-const checRoles = verifySignUp.checkRolesExisted
-module.exports = async fastify => {
-  /*  fastify.get(function (req, res, next) {
-    res.header(
-      'Access-Control-Allow-Headers',
-      'x-access-token, Origin, Content-Type, Accept'
-    )
-    next()
-  }) */
-  fastify.post(
-    '/api/auth/signup',
-    {
-      checkdublicate,
-      checRoles
-    },
-    controller.signup
-  )
+/* const { validatePostLogin, validatePostSignup } = require('../validations/auth') */
+const authController = require('../controllers/authController')
 
-  fastify.post('/api/auth/signin', controller.signin)
+module.exports = async fastify => {
+  fastify.post('/auth/login', authController.login)
+  fastify.post('/auth/signup', authController.signup) // TODO: validatePostSignup
+  fastify.post('/auth/forgotpassword', authController.forgotPassword)
+  fastify.post('/auth/resetpassword', authController.resetPassword)
 }
