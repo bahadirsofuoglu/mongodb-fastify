@@ -15,6 +15,7 @@ fastify.register(AutoLoad, {
 fastify.register(cors, {
   origin: true
 })
+
 fastify.register(function (req, res, next) {
   if (
     req.headers &&
@@ -35,12 +36,13 @@ fastify.register(function (req, res, next) {
     next()
   }
 })
-// Connect to DB
 mongoose
-  .connect(process.env.MONGO_URI, { useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+  })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err))
-
 const start = async () => {
   try {
     await fastify.listen(3000)

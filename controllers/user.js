@@ -27,9 +27,9 @@ exports.login = function (req, res) {
       if (!user || !user.comparePassword(req.body.password)) {
         return res
           .status(401)
-          .json({ message: 'Authentication failed. Invalid user or password.' })
+          .send({ message: 'Authentication failed. Invalid user or password.' })
       }
-      return res.json({
+      return res.send({
         token: jwt.sign(
           { email: user.email, fullName: user.fullName, _id: user._id },
           'RESTFULAPIs'
@@ -43,7 +43,7 @@ exports.loginRequired = function (req, res, next) {
   if (req.user) {
     next()
   } else {
-    return res.status(401).json({ message: 'Unauthorized user!!' })
+    return res.status(401).send({ message: 'Unauthorized user!!' })
   }
 }
 exports.profile = function (req, res, next) {
@@ -51,6 +51,6 @@ exports.profile = function (req, res, next) {
     res.send(req.user)
     next()
   } else {
-    return res.status(401).json({ message: 'Invalid token' })
+    return res.status(401).send({ message: 'Invalid token' })
   }
 }
