@@ -7,7 +7,7 @@ const formBody = require('fastify-formbody')
 const cors = require('fastify-cors')
 const path = require('path')
 const mongoose = require('mongoose')
-
+const jsonwebtoken = require('jsonwebtoken')
 const db = require('./models')
 const Role = db.role
 fastify.register(formBody)
