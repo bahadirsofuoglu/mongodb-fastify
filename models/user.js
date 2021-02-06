@@ -1,30 +1,31 @@
 const mongoose = require('mongoose')
 
-const User = mongoose.model(
-  'User',
-  new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String,
-    roles: String
-  })
-)
-exports.beforeUpdate = instance => {
-  if (instance.password) {
-    return hashPassword(instance.password).then(hashedPassword => {
-      instance.password = hashedPassword
-    })
-  }
-}
-
-exports.methods = {
-  comparePassword: async (candidatePassword, hashedPassword) => {
-    const isMatch = await comparePassword(candidatePassword, hashedPassword)
-    return isMatch
+const UserSchema = mongoose.Schema({
+  firstname: {
+    type: String,
+    required: true
   },
-  hashPassword: async password => {
-    const hashedPassword = await hashPassword(password)
-    return hashedPassword
+  lastname: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now()
   }
-}
-module.exports = User
+})
+
+// export model user with UserSchema
+module.exports = mongoose.model('user', UserSchema)
