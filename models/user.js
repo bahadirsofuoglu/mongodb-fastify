@@ -21,6 +21,10 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  history: {
+    type: [Product.schema],
+    default: []
+  },
   createdAt: {
     type: Date,
     default: Date.now()
