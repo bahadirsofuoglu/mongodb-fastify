@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { Product } = require('./product')
+const Product = require('./product')
 const UserSchema = mongoose.Schema({
   firstname: {
     type: String,
