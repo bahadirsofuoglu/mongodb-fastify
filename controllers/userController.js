@@ -18,3 +18,10 @@ exports.user = async (req, res) => {
       res.status(500).send() // server error
     })
 }
+exports.delete = async (req, res) => {
+  const query = { _id: req.query.email }
+  User.deleteOne(query, (err, doc) => {
+    if (err) return res.json({ success: false, err })
+    return res.json({ success: true, doc })
+  })
+}
