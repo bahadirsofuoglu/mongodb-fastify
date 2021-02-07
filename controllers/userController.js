@@ -25,3 +25,21 @@ exports.delete = async (req, res) => {
     return res.json({ success: true, doc })
   })
 }
+exports.put = async (req, res) => {
+  const { email, newEmail } = req.body
+  User.findOneAndUpdate(
+    { email: email },
+    { $set: { email: newEmail } },
+    { new: true }
+  )
+    .then(user => {
+      if (!user) {
+        res.status(404).send()
+      } else {
+        res.send(user)
+      }
+    })
+    .catch(error => {
+      res.status(400).send() // bad request
+    })
+}

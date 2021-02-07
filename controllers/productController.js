@@ -37,6 +37,17 @@ exports.product = async (req, res) => {
       })
   }
 }
+exports.put = async (req, res) => {
+  const id = req.body._id
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send()
+    return
+  }
+  Product.findOneAndUpdate({ _id: id }, req.body, { new: true }, (err, doc) => {
+    if (err) return res.json({ success: false, err })
+    return res.json({ success: true, doc })
+  })
+}
 
 exports.delete = async (req, res) => {
   const id = req.params.id
