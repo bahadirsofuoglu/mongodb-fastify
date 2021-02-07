@@ -1,7 +1,6 @@
-const { User } = require('./models/user')
-const { Product } = require('./models/product')
-const { Transaction } = require('./models/transaction')
-const { ObjectID } = require('mongodb')
+const { User } = require('../models/user')
+const { Transaction } = require('../models/transaction')
+
 exports.create = async (req, res) => {
   const { product, paymentData, user_id } = req.body
   const transactionData = {
