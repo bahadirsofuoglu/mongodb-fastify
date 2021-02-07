@@ -1,4 +1,4 @@
-const { User } = require('./models/user')
+const User = require('../models/user')
 exports.create = async (req, res) => {
   /* Example Request Body
    *  {
