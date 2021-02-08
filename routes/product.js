@@ -1,7 +1,8 @@
 const productController = require('../controllers/productController')
 
 module.exports = async fastify => {
-  fastify.get('/products', productController.products)
-  fastify.get('/products/:id', productController.product)
-  fastify.post('/products/create', productController.create)
+  fastify.post('/products', productController.create)
+  fastify.get('/products', productController.product)
+  fastify.put('/products/:id', productController.put)
+  fastify.delete('/products/:id', productController.delete)
 }

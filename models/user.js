@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const Product = require('./product')
 const UserSchema = mongoose.Schema({
   firstname: {
     type: String,
@@ -20,6 +20,10 @@ const UserSchema = mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  history: {
+    type: [Product.schema],
+    default: []
   },
   createdAt: {
     type: Date,
