@@ -13,9 +13,7 @@ fastify.register(formBody)
 fastify.register(AutoLoad, {
   dir: path.join(__dirname, 'routes')
 })
-fastify.register(cors, {
-  origin: true
-})
+fastify.register(cors)
 fastify.register(jwt, {
   secret: process.env.JWT
 })
