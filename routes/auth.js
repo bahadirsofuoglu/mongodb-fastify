@@ -3,5 +3,5 @@ const authController = require('../controllers/authController')
 
 module.exports = async fastify => {
   fastify.post('/auth/signup', authController.signup)
-  fastify.post('/auth/login', authController.login) // TODO: validatePostSignup
+  fastify.post('/auth/login', authController.login)
 }

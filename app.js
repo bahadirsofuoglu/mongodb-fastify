@@ -64,6 +64,7 @@ mongoose
     console.error('Connection error', err)
     process.exit()
   })
+
 const start = async () => {
   try {
     await fastify.listen(3000)
