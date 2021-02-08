@@ -4,7 +4,6 @@ const fastify = require('fastify')({
 require('dotenv').config()
 const AutoLoad = require('fastify-autoload')
 const formBody = require('fastify-formbody')
-const config = require('config')
 const cors = require('fastify-cors')
 const jwt = require('fastify-jwt')
 const path = require('path')
@@ -18,7 +17,7 @@ fastify.register(cors, {
   origin: true
 })
 fastify.register(jwt, {
-  secret: config.get('secrets.jwt')
+  secret: process.env.JWT
 })
 const authenticate = async request => {
   const auth = await request.jwtVerify()
@@ -64,13 +63,10 @@ mongoose
     console.error('Connection error', err)
     process.exit()
   })
-
-const start = async () => {
-  try {
-    await fastify.listen(6000)
-  } catch (err) {
-    fastify.log.error(err)
+const port = process.env.PORT || 8080
+fastify.listen(port, '0.0.0.0', err => {
+  if (err) {
+    console.error(err)
     process.exit(1)
   }
-}
-start()
+})

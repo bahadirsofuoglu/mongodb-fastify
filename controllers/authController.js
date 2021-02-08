@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 const config = require('config')
-
+require('dotenv').config()
 exports.signup = async (req, res) => {
   const { firstname, lastname, role, email, password } = req.body
   try {
