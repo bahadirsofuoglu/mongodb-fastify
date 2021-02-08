@@ -4,13 +4,7 @@ const categorySchema = mongoose.Schema({
   name: {
     type: String,
     required: true
-  },
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'product'
-    }
-  ]
+  }
 })
 
 // export model user with UserSchema
