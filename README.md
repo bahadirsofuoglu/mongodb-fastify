@@ -24,6 +24,7 @@ MONGO_URI=<YOUR-MONGO-URIN>
 ```
 ###### Run Project
 ```sh
+$ git clone https://github.com/bahadirsofuoglu/mongodb-fastify.git
 $ npm install
 $ npm run seed
 $ npm run serve
