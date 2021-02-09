@@ -7,7 +7,7 @@ exports.create = async (req, res) => {
   res.send(newProduct)
 }
 
-exports.product = async (req, res) => {
+/* exports.product = async (req, res) => {
   if (req.query.id == null) {
     Product.find()
       .populate('category')
@@ -33,6 +33,12 @@ exports.product = async (req, res) => {
     .catch(error => {
       res.status(500).send() // server error
     })
+} */
+exports.product = async (req, res) => {
+  const id = req.params.id
+
+  const response = await Product.findOne({ _id: id }).populate('category')
+  res.send(response)
 }
 
 exports.put = async (req, res) => {

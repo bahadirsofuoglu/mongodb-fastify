@@ -8,9 +8,13 @@ const productDetailSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  detailName: {
+    type: String,
+    required: true
+  },
   product: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    ref: 'product'
   }
 })
 module.exports = mongoose.model('ProductDetail', productDetailSchema)
