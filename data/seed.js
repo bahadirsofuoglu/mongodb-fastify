@@ -14,17 +14,48 @@ seeder.connect(process.env.MONGO_URI, function () {
   })
 })
 
-const categoryArray = []
+/* const categoryArray = []
 for (let i = 0; i < 50; i++) {
   const object = {
     name: `Test${i}`
   }
   categoryArray.push(object)
-}
+} */
 // Data array containing seed data - documents organized by Model
 var data = [
   {
     model: 'category',
-    documents: categoryArray
+    documents: [
+      {
+        name: 'Bilgisayar'
+      },
+      {
+        name: 'Beyaz Eşya'
+      },
+      {
+        name: 'Telefon'
+      },
+      {
+        name: 'Araba'
+      },
+      {
+        name: 'Kitap'
+      },
+      {
+        name: 'Konsol'
+      },
+      {
+        name: 'Giyim'
+      },
+      {
+        name: 'Mobilya'
+      },
+      {
+        name: 'Aksesuar'
+      },
+      {
+        name: 'Yiyecek'
+      }
+    ]
   }
 ]
