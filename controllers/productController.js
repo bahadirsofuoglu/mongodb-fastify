@@ -1,5 +1,6 @@
 const Product = require('../models/product')
 const { ObjectID } = require('mongoose')
+
 exports.create = async (req, res) => {
   let reqProduct = req.body
   const newProduct = new Product(reqProduct)
@@ -8,18 +9,16 @@ exports.create = async (req, res) => {
 }
 
 exports.products = async (req, res) => {
-  /*   if (req.query.id == null) {
-    Product.find()
-      .populate('category')
-      .then(
-        items => {
-          res.send(items)
-        },
-        error => {
-          res.status(500).send(error) // server error
-        }
-      )
-  } */
+  if (req.query.id == null) {
+    Product.find().then(
+      items => {
+        res.send(items)
+      },
+      error => {
+        res.status(500).send(error) // server error
+      }
+    )
+  }
   const query = { category: req.query.category }
   Product.find(query)
     .populate('category')
