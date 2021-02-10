@@ -7,8 +7,8 @@ exports.create = async (req, res) => {
   res.send(newProduct)
 }
 
-/* exports.product = async (req, res) => {
-  if (req.query.id == null) {
+exports.products = async (req, res) => {
+  /*   if (req.query.id == null) {
     Product.find()
       .populate('category')
       .then(
@@ -19,9 +19,9 @@ exports.create = async (req, res) => {
           res.status(500).send(error) // server error
         }
       )
-  }
-  const query = { _id: req.query.id }
-  Product.findOne(query)
+  } */
+  const query = { category: req.query.category }
+  Product.find(query)
     .populate('category')
     .then(item => {
       if (!item) {
@@ -33,7 +33,7 @@ exports.create = async (req, res) => {
     .catch(error => {
       res.status(500).send() // server error
     })
-} */
+}
 exports.product = async (req, res) => {
   const id = req.params.id
 
